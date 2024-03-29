@@ -1,0 +1,1 @@
+A test project aimed at connecting a 7" SSD1963 display to the STM32-F401CDU6 microcontroller. I utilized a library created by user github.com/offpic to manage the display. Subsequently, I modified the library to suit my own needs and sped up its performance several times by leveraging the available processor registers.
