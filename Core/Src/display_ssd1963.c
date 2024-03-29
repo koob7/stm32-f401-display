@@ -44,69 +44,26 @@ void tft_write_bus(uint8_t high_byte,uint8_t low_byte)
   }*/
 	PORTA->ODR = (PORTA->ODR & 0xffffff00) | low_byte;
 	PORTB->ODR = (PORTB->ODR & 0xffffff00) | high_byte;
-  asm("nop");
-  pin_low(WR_PORT,WR_PIN);
-  pin_high(WR_PORT,WR_PIN);
+	asm("nop");
+	pin_low(WR_PORT,WR_PIN);
+	pin_high(WR_PORT,WR_PIN);
 }
 
 
-void tft_write_data8(uint8_t high_byte,uint8_t low_byte)
-{
-	pin_high(RS_PORT,RS_PIN);
-	tft_write_bus(high_byte,low_byte);
-}
+
 void Lcd_Write_Data(uint16_t data)
 {
   pin_high(RS_PORT,RS_PIN);
   tft_write_bus(data>>8,data&0x00ff);
-//	  RS;
-//		CSN;
-//		tft_write_bus(data>>8,data&0x00ff);
-//
-//		WRN;
-//		WR;
-//		CS;
-//	CSN;
-//    //TFT_RDSet();     //DESACTIVA LA LECTURA Y ACTIVA LA ESCRITUDA
-//	RS;
-//    tft_write_bus(data>>8,data&0x00ff);
-//    		WRN;
-//    		WR;
-//    		CS;
-
 }
 
 void Lcd_Write_Cmd(uint16_t data)
 {
   pin_low(RS_PORT,RS_PIN);
   tft_write_bus(data>>8,data&0x00ff);
-//	  RSN;
-//		CSN;
-//		tft_write_bus(data>>8,data&0x00ff);
-//
-//		WRN;
-//		WR;
-//		CS;
-
-//	CSN;
-//    //TFT_RDSet();     //DESACTIVA LA LECTURA Y ACTIVA LA ESCRITUDA
-//	RSN;
-//	tft_write_bus(data>>8,data&0x00ff);
-//    WRN;
-//    		WR;
-//    		CS;
 }
 
-//void Lcd_Write_Cmd(uint16_t Cmd)
-//{
-//   *(uint16_t *) (LCD_REG) = Cmd;
-//}
-//////////////////////////
-//void Lcd_Write_Data(uint16_t data)
-//{
-//   *(uint16_t *) (LCD_DATA)= data;
-//}
-///////////////////
+
 void Lcd_SetArea(uint16_t sx, uint16_t ex, uint16_t sy, uint16_t ey)
 {
 Lcd_Write_Cmd(SSD1963_SET_COLUMN_ADDRESS);	
@@ -160,526 +117,126 @@ Lcd_Write_Data(color);
 Lcd_Write_Cmd(0x0);
 }
 
-void LCD_Write_DATA(uint16_t data)
-{
-  pin_high(RS_PORT,RS_PIN);
-  tft_write_bus(data>>8,data&0x00ff);
-//	  RS;
-//		CSN;
-//		tft_write_bus(data>>8,data&0x00ff);
-//
-//		WRN;
-//		WR;
-//		CS;
-//	CSN;
-//    //TFT_RDSet();     //DESACTIVA LA LECTURA Y ACTIVA LA ESCRITUDA
-//	RS;
-//    tft_write_bus(data>>8,data&0x00ff);
-//    		WRN;
-//    		WR;
-//    		CS;
-
-}
-
-void LCD_Write_COM(uint16_t data)
-{
-  pin_low(RS_PORT,RS_PIN);
-  tft_write_bus(data>>8,data&0x00ff);
-//	  RSN;
-//		CSN;
-//		tft_write_bus(data>>8,data&0x00ff);
-//
-//		WRN;
-//		WR;
-//		CS;
-
-//	CSN;
-//    //TFT_RDSet();     //DESACTIVA LA LECTURA Y ACTIVA LA ESCRITUDA
-//	RSN;
-//	tft_write_bus(data>>8,data&0x00ff);
-//    WRN;
-//    		WR;
-//    		CS;
-}
 
 
 void Init_SSD1963(void)
 {
-//
-			pin_high(CS_PORT,CS_PIN);
-			pin_high(RD_PORT,RD_PIN);
-			pin_high(WR_PORT,WR_PIN);
-			pin_low(REST_PORT,REST_PIN);
 
-			HAL_Delay(20);
-			pin_high(REST_PORT,REST_PIN);
-			HAL_Delay(20);
-			pin_low(CS_PORT,CS_PIN);
+	pin_high(CS_PORT,CS_PIN);
+	pin_high(RD_PORT,RD_PIN);
+	pin_high(WR_PORT,WR_PIN);
+	pin_low(REST_PORT,REST_PIN);
 
-//	RST;
-//  	HAL_Delay(100);
-//	RSTN;;
-//	HAL_Delay(100);
-//	RST;
-//	CS;
-//	RD;
-//	WR;
-//	HAL_Delay(100);
-//
-//	RSTN;
-//	RS;
-//	CS;
-//	RD;
-//	WR;
-//    HAL_Delay(100);
-//    RST;
-//    HAL_Delay(200);
-
-//			write_command(0x00E2);	//PLL multiplier, set PLL clock to 120M
-//			Write_Data_int(0x0023);	    //N=0x36 for 6.5M, 0x23 for 10M crystal
-//			Write_Data_int(0x0002);
-//			Write_Data_int(0x0054);
-//			write_command(0x00E0);  // PLL enable
-//			Write_Data_int(0x0001);
-//			HAL_Delay(1);
-//			write_command(0x00E0);
-//			Write_Data_int(0x0003);		// now, use PLL output as system clock
-//			HAL_Delay(1);
-//			write_command(0x0001);  // software reset
-//			HAL_Delay(1);
-//			write_command(0x00E6);	//PLL setting for PCLK, depends on resolution
-//			Write_Data_int(0x0003);
-//			Write_Data_int(0x0033);
-//			Write_Data_int(0x0033);
-//
-//			write_command(0x00B0);	//LCD SPECIFICATION
-//			Write_Data_int(0x0020); //24 bit TFT panel
-//			Write_Data_int(0x0000); //Hsync+Vsync +DE mode  TFT mode
-//			Write_Data_int((799>>8));  //Set HDP
-//			Write_Data_int(799);
-//		    Write_Data_int(479>>8);  //Set VDP
-//			Write_Data_int(479);
-//		    Write_Data_int(0x0000);
-//
-//			write_command(0x00B4);	//HSYNC
-//			Write_Data_int(0x04);  //Set HT
-//			Write_Data_int(0x1f);
-//			Write_Data_int(0x00);  //Set HPS
-//			Write_Data_int(0xd2);
-//			Write_Data_int(0x00);			   //Set HPW
-//			Write_Data_int(0x00);  //Set HPS
-//			Write_Data_int(0x00);
-//			Write_Data_int(0x00);
-//
-//			write_command(0x00B6);	//VSYNC
-//			Write_Data_int(0x02);   //Set VT
-//			Write_Data_int(0x0c);
-//			Write_Data_int(0x00);  //Set VPS
-//			Write_Data_int(0x22);
-//			Write_Data_int(0x00);		//Set VPW
-//			Write_Data_int(0x00);  //Set FPS
-//			Write_Data_int(0x00);
-//
-//
-//			write_command(0x00B8);
-//			Write_Data_int(0x000f);    //GPIO is controlled by host GPIO[3:0]=output   GPIO[0]=1  LCD ON  GPIO[0]=1  LCD OFF
-//			Write_Data_int(0x0001);    //GPIO0 normal
-//
-//			write_command(0x00BA);
-//			Write_Data_int(0x0001);    //GPIO[0] out 1 --- LCD display on/off control PIN
-//
-//			write_command(0x0036); //rotation
-//			Write_Data_int(0x0008);//RGB=BGR
-//
-//			write_command(0x003A); //Set the current pixel format for RGB image data
-//			Write_Data_int(0x0050);//16-bit/pixel
-//
-//			write_command(0x00F0); //Pixel Data Interface Format
-//			Write_Data_int(0x0003);//16-bit(565 format) data
-//
-//			write_command(0x00BC);
-//			Write_Data_int(0x0040);//contrast value
-//			Write_Data_int(0x0080);//brightness value
-//			Write_Data_int(0x0040);//saturation value
-//			Write_Data_int(0x0001);//Post Processor Enable
-//
-//			HAL_Delay(1);
-//
-//			write_command(0x0029); //display on
-//
-//
-//
-//
-//			write_command(0x00BE); //set PWM for B/L
-//			Write_Data_int(0x0006);
-//			Write_Data_int(0x0080);
-//			Write_Data_int(0x0001);
-//			Write_Data_int(0x00f0);
-//			Write_Data_int(0x0000);
-//			Write_Data_int(0x0000);
-//
-//			write_command(0x00d0);
-//			Write_Data_int(0x000d);
-
-//
-//
-//Lcd_Write_Cmd(0xe0); //START PLL
-//Lcd_Write_Data(0x01);  //Set bit Enable PLL
-//HAL_Delay(50);  //Wait  to let the PLL stable
-//
-//Lcd_Write_Cmd(0xe0); //START PLL
-//Lcd_Write_Data(0x03);  //(0 - Use reference clock as system clock   1 -  Use PLL output as system clock)
-//HAL_Delay(5);
-//
-//Lcd_Write_Cmd(0x01); // Software reset
-//HAL_Delay(10);
-//
-//Lcd_Write_Cmd(0xe2);//Set the PLL
-//Lcd_Write_Data(0x1d);
-//Lcd_Write_Data(0x02);
-//Lcd_Write_Data(0x54);
-//
-//Lcd_Write_Cmd(0xe6);//Set the LSHIFT (pixel clock) frequency
-//Lcd_Write_Data(0x04);
-//Lcd_Write_Data(0x6f);
-//Lcd_Write_Data(0x47);
-//
-//Lcd_Write_Cmd(0xf0);//SET pixel data I/F format=8bit
-//Lcd_Write_Data(0x03); //pixel data format, 0x03 is 16bit(565 format);0x00 is for 8-bit
-////Set the MN of PLL
-//
-////////cput(0xe2);   //SET PLL freq=113.33MHz ;
-////////dput(0x1d); // values set are diff in app note (1D)
-////////dput(0x02);   // values set are diff in app note (02)
-////////dput(0x54); // values set are diff in app note (54)
-////////
-////////cput(0xe6);   //SET PCLK freq=33.26MHz ; pixel clock frequency
-////////dput(0x04); //01 values set are diff in app note 0x04
-////////dput(0x6f); //30 values set are diff in app note 0x6f
-////////dput(0x47); //16 values set are diff in app note 0x47
-//
-//Lcd_Write_Cmd(0xb0);	//LCD SPECIFICATION   SET LCD MODE SET TFT 18Bits MODE
-//Lcd_Write_Data(0x20);  //dput(0x08); //SET TFT MODE & hsync+Vsync+DEN MODE
-//Lcd_Write_Data(0x80);  //
-//Lcd_Write_Data(0x03);//SET horizontal size=800-1 HightByte
-//Lcd_Write_Data(0x1f);//1f   //SET horizontal size=800-1 LowByte
-//Lcd_Write_Data(0x01);//SET vertical size=480-1 HightByte
-//Lcd_Write_Data(0xdf);//df   //SET vertical size=480-1 LowByte
-//Lcd_Write_Data(0x00);//   dput(0x2d); //SET even/odd line RGB seq.=RGB
-//
-////Set front porch and back porch
-//Lcd_Write_Cmd(0xb4);// SET HBP
-//Lcd_Write_Data(0x04); // SET HSYNC Total = // 0x04 SET HSYNC Total = 1056  // hsync of  value in app note is 8367 & not 1056
-//Lcd_Write_Data(0x20);
-//Lcd_Write_Data(0x00); // SET HBP = //SET HBP = 256 // HBP of value in app note is 163 & not 256
-//Lcd_Write_Data(0x2e);  //SET VBP 0 //  earlier value of VBP = 8 , write data ( 0x07)
-//Lcd_Write_Data(0xd2);// SET VBP
-//Lcd_Write_Data(0x00);
-//Lcd_Write_Data(0x00);// SET Hsync pulse start position
-//Lcd_Write_Data(0x00);// SET Hsync pulse subpixel start position
-//
-//Lcd_Write_Cmd(0xb6);    //SET VBP,
-//Lcd_Write_Data(0x02); //0x02 SET Vsync total 526 = 525 + 1  // vsync of  value in app note is 496  & not 525
-//Lcd_Write_Data(0x0d);
-//Lcd_Write_Data(0x00); //SET VBP = 45                // HBP of value in app note is 4 & not 45
-//Lcd_Write_Data(0x17);// 0x2d
-//Lcd_Write_Data(0x16);// 0x00 SET Vsync pulse 0     // SET Vsync pulse in app note is 2
-//Lcd_Write_Data(0x00); //SET Vsync pulse start position
-//Lcd_Write_Data(0x00);
-//
-//Lcd_Write_Cmd(0x2a);    //SET column address
-//Lcd_Write_Data(0x00); //SET start column address=0
-//Lcd_Write_Data(0x00);
-//Lcd_Write_Data(0x03); //SET end column address=799
-//Lcd_Write_Data(0x1f);
-//
-//Lcd_Write_Cmd(0x2b);;     //SET page address
-//Lcd_Write_Data(0x00);//SET start page address=0
-//Lcd_Write_Data(0x00);
-//Lcd_Write_Data(0x01);//SET end page address=479
-//Lcd_Write_Data(0xdf);  //1f
-//
-//Lcd_Write_Cmd(0x036);  //SET RGB BGR
-//Lcd_Write_Data(0x08);  //1 BGR  0  RGB
-////Lcd_Write_Cmd(0x36);;     //SET address mode to rotate mode
-////Lcd_Write_Data(0x60);
-////Lcd_Write_Cmd(0x3a);  //Reserved command ???????????
-////Lcd_Write_Data(0x60);
-//
-//
-//////////===========================================
-////////Lcd_Write_Cmd(0x33);
-////////Lcd_Write_Data(0x00); //SET top fixed area=0
-////////Lcd_Write_Data(0xB4);
-////////Lcd_Write_Data(0x00); //SET vertical scrolling area=479
-////////Lcd_Write_Data(0x94);
-////////Lcd_Write_Data(0x00); //SET bottom fixed area=0
-////////Lcd_Write_Data(0x98);
-//////////===============================================
-//
-//Lcd_Write_Cmd(0xb8);
-//Lcd_Write_Data(0x0f);
-//Lcd_Write_Data(0x01);
-//
-//Lcd_Write_Cmd(0xba);
-//Lcd_Write_Data(0x01);
-//
-//Lcd_Write_Cmd(0x29);// SET display on
-//
-//Lcd_Write_Cmd(0x2c);
-//
-//
+	HAL_Delay(20);
+	pin_high(REST_PORT,REST_PIN);
+	HAL_Delay(20);
+	pin_low(CS_PORT,CS_PIN);
 
 
-
-
-
-
-//			LCD_Write_COM(0xE2);		//PLL multiplier, set PLL clock to 120M
-//			LCD_Write_DATA(0x1E);	    //N=0x36 for 6.5M, 0x23 for 10M crystal
-//			LCD_Write_DATA(0x02);
-//			LCD_Write_DATA(0x54);
-//			LCD_Write_COM(0xE0);		// PLL enable
-//			LCD_Write_DATA(0x01);
-//			HAL_Delay(10);
-//			LCD_Write_COM(0xE0);
-//			LCD_Write_DATA(0x03);
-//			HAL_Delay(10);
-//			LCD_Write_COM(0x01);		// software reset
-//			HAL_Delay(100);
-//			LCD_Write_COM(0xE6);		//PLL setting for PCLK, depends on resolution
-//			LCD_Write_DATA(0x03);
-//			LCD_Write_DATA(0xFF);
-//			LCD_Write_DATA(0xFF);
-//
-//			LCD_Write_COM(0xB0);		//LCD SPECIFICATION
-//			LCD_Write_DATA(0x20);
-//			LCD_Write_DATA(0x00);
-//			LCD_Write_DATA(0x03);		//Set HDP	799
-//			LCD_Write_DATA(0x1F);
-//			LCD_Write_DATA(0x01);		//Set VDP	479
-//			LCD_Write_DATA(0xDF);
-//			LCD_Write_DATA(0x00);
-//
-//			LCD_Write_COM(0xB4);		//HSYNC
-//			LCD_Write_DATA(0x03);		//Set HT	928
-//			LCD_Write_DATA(0xA0);
-//			LCD_Write_DATA(0x00);		//Set HPS	46
-//			LCD_Write_DATA(0x2E);
-//			LCD_Write_DATA(0x30);		//Set HPW	48
-//			LCD_Write_DATA(0x00);		//Set LPS	15
-//			LCD_Write_DATA(0x0F);
-//			LCD_Write_DATA(0x00);
-//
-//			LCD_Write_COM(0xB6);		//VSYNC
-//			LCD_Write_DATA(0x02);		//Set VT	525
-//			LCD_Write_DATA(0x0D);
-//			LCD_Write_DATA(0x00);		//Set VPS	16
-//			LCD_Write_DATA(0x10);
-//			LCD_Write_DATA(0x10);		//Set VPW	16
-//			LCD_Write_DATA(0x00);		//Set FPS	8
-//			LCD_Write_DATA(0x08);
-//
-//			LCD_Write_COM(0xBA);
-//			LCD_Write_DATA(0x0F);		//GPIO[3:0] out 1
-//
-//			LCD_Write_COM(0xB8);
-//			LCD_Write_DATA(0x07);	    //GPIO3=input, GPIO[2:0]=output
-//			LCD_Write_DATA(0x01);		//GPIO0 normal
-//
-//			LCD_Write_COM(0x36);		//rotation
-//			LCD_Write_DATA(0x2A);
-//
-//			LCD_Write_COM(0xF0);		//pixel data interface
-//			LCD_Write_DATA(0x03);
-//
-//
-//			HAL_Delay(1);
-//
-//
-//			LCD_Write_COM(0xB8);
-//			LCD_Write_DATA(0x0f);    //GPIO is controlled by host GPIO[3:0]=output   GPIO[0]=1  LCD ON  GPIO[0]=1  LCD OFF
-//			LCD_Write_DATA(0x01);    //GPIO0 normal
-//
-//			LCD_Write_COM(0xBA);
-//			LCD_Write_DATA(0x01);    //GPIO[0] out 1 --- LCD display on/off control PIN
-//
-//
-////			setXY(0, 0, 799, 479);
-//			LCD_Write_COM(0x29);		//display on
-//
-//			LCD_Write_COM(0xBE);		//set PWM for B/L
-//			LCD_Write_DATA(0x06);
-//			LCD_Write_DATA(0xf0);
-//			LCD_Write_DATA(0x01);
-//			LCD_Write_DATA(0xf0);
-//			LCD_Write_DATA(0x00);
-//			LCD_Write_DATA(0x00);
-//
-//			LCD_Write_COM(0xd0);
-//			LCD_Write_DATA(0x0d);
-//
-//			LCD_Write_COM(0x2C);
-
-
-
-
-
-LCD_Write_COM(0xE2);		//PLL multiplier, set PLL clock to 120M
-LCD_Write_DATA(0x23);	    //N=0x36 for 6.5M, 0x23 for 10M crystal
-LCD_Write_DATA(0x02);
-LCD_Write_DATA(0x04);
-LCD_Write_COM(0xE0);		// PLL enable
-LCD_Write_DATA(0x01);
+Lcd_Write_Cmd(0xE2);		//PLL multiplier, set PLL clock to 120M
+Lcd_Write_Data(0x23);	    //N=0x36 for 6.5M, 0x23 for 10M crystal
+Lcd_Write_Data(0x02);
+Lcd_Write_Data(0x04);
+Lcd_Write_Cmd(0xE0);		// PLL enable
+Lcd_Write_Data(0x01);
 HAL_Delay(10);
-LCD_Write_COM(0xE0);
-LCD_Write_DATA(0x03);
+Lcd_Write_Cmd(0xE0);
+Lcd_Write_Data(0x03);
 HAL_Delay(10);
-LCD_Write_COM(0x01);		// software reset
+Lcd_Write_Cmd(0x01);		// software reset
 HAL_Delay(100);
-LCD_Write_COM(0xE6);		//PLL setting for PCLK, depends on resolution
-LCD_Write_DATA(0x04);
-LCD_Write_DATA(0x93);
-LCD_Write_DATA(0xE0);
+Lcd_Write_Cmd(0xE6);		//PLL setting for PCLK, depends on resolution
+Lcd_Write_Data(0x04);
+Lcd_Write_Data(0x93);
+Lcd_Write_Data(0xE0);
 
-LCD_Write_COM(0xB0);		//LCD SPECIFICATION
-LCD_Write_DATA(0x00);	// 0x24
-LCD_Write_DATA(0x00);
-LCD_Write_DATA(0x03);		//Set HDP	799
-LCD_Write_DATA(0x1F);
-LCD_Write_DATA(0x01);		//Set VDP	479
-LCD_Write_DATA(0xDF);
-LCD_Write_DATA(0x00);
+Lcd_Write_Cmd(0xB0);		//LCD SPECIFICATION
+Lcd_Write_Data(0x00);		// 0x24
+Lcd_Write_Data(0x00);
+Lcd_Write_Data(0x03);		//Set HDP	799
+Lcd_Write_Data(0x1F);
+Lcd_Write_Data(0x01);		//Set VDP	479
+Lcd_Write_Data(0xDF);
+Lcd_Write_Data(0x00);
 
-LCD_Write_COM(0xB4);		//HSYNC
-LCD_Write_DATA(0x03);		//Set HT	928
-LCD_Write_DATA(0xA0);
-LCD_Write_DATA(0x00);		//Set HPS	46
-LCD_Write_DATA(0x2E);
-LCD_Write_DATA(0x30);		//Set HPW	48
-LCD_Write_DATA(0x00);		//Set LPS	15
-LCD_Write_DATA(0x0F);
-LCD_Write_DATA(0x00);
+Lcd_Write_Cmd(0xB4);		//HSYNC
+Lcd_Write_Data(0x03);		//Set HT	928
+Lcd_Write_Data(0xA0);
+Lcd_Write_Data(0x00);		//Set HPS	46
+Lcd_Write_Data(0x2E);
+Lcd_Write_Data(0x30);		//Set HPW	48
+Lcd_Write_Data(0x00);		//Set LPS	15
+Lcd_Write_Data(0x0F);
+Lcd_Write_Data(0x00);
 
-LCD_Write_COM(0xB6);		//VSYNC
-LCD_Write_DATA(0x02);		//Set VT	525
-LCD_Write_DATA(0x0D);
-LCD_Write_DATA(0x00);		//Set VPS	16
-LCD_Write_DATA(0x10);
-LCD_Write_DATA(0x10);		//Set VPW	16
-LCD_Write_DATA(0x00);		//Set FPS	8
-LCD_Write_DATA(0x08);
+Lcd_Write_Cmd(0xB6);		//VSYNC
+Lcd_Write_Data(0x02);		//Set VT	525
+Lcd_Write_Data(0x0D);
+Lcd_Write_Data(0x00);		//Set VPS	16
+Lcd_Write_Data(0x10);
+Lcd_Write_Data(0x10);		//Set VPW	16
+Lcd_Write_Data(0x00);		//Set FPS	8
+Lcd_Write_Data(0x08);
 
-LCD_Write_COM(0xBA);
-LCD_Write_DATA(0x05);		//GPIO[3:0] out 1
+Lcd_Write_Cmd(0xBA);
+Lcd_Write_Data(0x05);		//GPIO[3:0] out 1
 
-LCD_Write_COM(0xB8);
-LCD_Write_DATA(0x07);	    //GPIO3=input, GPIO[2:0]=output
-LCD_Write_DATA(0x01);		//GPIO0 normal
+Lcd_Write_Cmd(0xB8);
+Lcd_Write_Data(0x07);	    //GPIO3=input, GPIO[2:0]=output
+Lcd_Write_Data(0x01);		//GPIO0 normal
 
-//LCD_Write_COM(0x36);		//rotation
-//LCD_Write_DATA(0x21);		// -- Set to 0x22 to rotate 180 degrees 0x21
-
-LCD_Write_COM(0xba);		//rotation
-LCD_Write_DATA(0x01);		// -- Set to 0x22 to rotate 180 degrees 0x21
+Lcd_Write_Cmd(0xba);		//rotation
+Lcd_Write_Data(0x01);		// -- Set to 0x22 to rotate 180 degrees 0x21
 
 
-LCD_Write_COM(0xF0);		//pixel data interface
-LCD_Write_DATA(0x03);
+Lcd_Write_Cmd(0xF0);		//pixel data interface
+Lcd_Write_Data(0x03);
 
 
 HAL_Delay(10);
 
 Lcd_SetArea(0, 0, 799, 479);
-LCD_Write_COM(0x29);		//display on
+Lcd_Write_Cmd(0x29);		//display on
 
-LCD_Write_COM(0xBE);		//set PWM for B/L
-LCD_Write_DATA(0x06);
-LCD_Write_DATA(0xF0);
-LCD_Write_DATA(0x01);
-LCD_Write_DATA(0xF0);
-LCD_Write_DATA(0x00);
-LCD_Write_DATA(0x00);
+Lcd_Write_Cmd(0xBE);		//set PWM for B/L
+Lcd_Write_Data(0x06);
+Lcd_Write_Data(0xF0);
+Lcd_Write_Data(0x01);
+Lcd_Write_Data(0xF0);
+Lcd_Write_Data(0x00);
+Lcd_Write_Data(0x00);
 
-LCD_Write_COM(0xD0);
-LCD_Write_DATA(0x0D);
+Lcd_Write_Cmd(0xD0);
+Lcd_Write_Data(0x0D);
 
-LCD_Write_COM(0x2C);
+Lcd_Write_Cmd(0x2C);
 
 }
-//===========================================================================
-//===========================================================================
-//===========================================================================
-//�-��� ��� �������� ������
-//static __inline  - not work before define of function 
-void 	TFT_Send_Cmd(uint16_t index)
-{
-//	*(uint8_t *) (LCD_REG) = index;
-	  pin_low(RS_PORT,RS_PIN);
-	  tft_write_bus(index>>8,index&0x00ff);
-//		  RSN;
-//			CSN;
-//			tft_write_bus(data>>8,data&0x00ff);
-//
-//			WRN;
-//			WR;
-//			CS;
 
 
-//	CSN;
-//    //TFT_RDSet();     //DESACTIVA LA LECTURA Y ACTIVA LA ESCRITUDA
-//	RSN;
-//	tft_write_bus(data>>8,data&0x00ff);
-//    WRN;
-//    		WR;
-//    		CS;
-}
 
-//�-��� ��� �������� ������
-void TFT_Write_Data(uint16_t data)
-{   
-//    *(uint16_t *) (LCD_DATA) = data;
-	  pin_high(RS_PORT,RS_PIN);
-	  tft_write_bus(data>>8,data&0x00ff);
-//		  RS;
-//			CSN;
-//			tft_write_bus(data>>8,data&0x00ff);
-//
-//			WRN;
-//			WR;
-//			CS;
-
-//	CSN;
-//    //TFT_RDSet();     //DESACTIVA LA LECTURA Y ACTIVA LA ESCRITUDA
-//	RS;
-//    tft_write_bus(data>>8,data&0x00ff);
-//    		WRN;
-//    		WR;
-//    		CS;
-}
-//�-��� ������������� ������� ������� �� X
 void TFT_Set_X(uint16_t start_x,uint16_t end_x)
 {
-	TFT_Send_Cmd(0x002A);
-	TFT_Write_Data(start_x>>8);
-	TFT_Write_Data(start_x&0x00ff);
+	Lcd_Write_Cmd(0x002A);
+	Lcd_Write_Data(start_x>>8);
+	Lcd_Write_Data(start_x&0x00ff);
 	
-	TFT_Write_Data(end_x>>8);
-	TFT_Write_Data(end_x&0x00ff);
+	Lcd_Write_Data(end_x>>8);
+	Lcd_Write_Data(end_x&0x00ff);
 }
 
-//�-��� ������������� ������� ������� �� Y
+
 void TFT_Set_Y(uint16_t start_y,uint16_t end_y)
 {
-	TFT_Send_Cmd(0x002B);
-	TFT_Write_Data(start_y>>8);
-	TFT_Write_Data(start_y&0x00ff);
+	Lcd_Write_Cmd(0x002B);
+	Lcd_Write_Data(start_y>>8);
+	Lcd_Write_Data(start_y&0x00ff);
 	
-	TFT_Write_Data(end_y>>8);
-	TFT_Write_Data(end_y&0x00ff);
+	Lcd_Write_Data(end_y>>8);
+	Lcd_Write_Data(end_y&0x00ff);
 }
 
-//�-��� ������ ���������� ����� �� �������
+
 void TFT_Set_XY(uint16_t x, uint16_t y)
 {
 	TFT_Set_X(x, x);
@@ -687,15 +244,15 @@ void TFT_Set_XY(uint16_t x, uint16_t y)
 }
 
 
-//�-���  ������ ���������� ������� �������
+
 void TFT_Set_Work_Area(uint16_t x, uint16_t y, uint16_t length, uint16_t width)
 {
 	TFT_Set_X(x, x+length-1);
 	TFT_Set_Y(y, y+width-1);
-	TFT_Send_Cmd(0x2C);
+	Lcd_Write_Cmd(0x2C);
 }
 
-//�-��� ����������� ������� ��������� ������
+
 void TFT_Clear_Screen(uint16_t color)
 {
 	uint32_t i=0;
@@ -703,15 +260,12 @@ void TFT_Clear_Screen(uint16_t color)
 	pin_high(RS_PORT,RS_PIN);
 	for(i=0; i < 384000; i++)
 	{
-//		TFT_Write_Data(color);	//������� ��������� �����
 
 
 		  tft_write_bus(color>>8,color&0x00ff);
 	}
 }
 
-
-//�-��� ������ ������ ������� �������, �����, �� ��������� ����, �� ��������� �������(��� �� ������ ���� ������� ������������ ������ ������ �� �������� 8�8)
 void TFT_Draw_Char(uint16_t x, uint16_t y, uint16_t color, uint16_t phone,const uint8_t *table, uint8_t ascii, uint8_t size)
 {
 	uint8_t i,f = 0;
@@ -733,26 +287,24 @@ void TFT_Draw_Char(uint16_t x, uint16_t y, uint16_t color, uint16_t phone,const 
 	}
 }
 
-//�-��� ������ ������, ��������� �� ��������� �������
+
 void TFT_Draw_String(uint16_t x, uint16_t y, uint16_t color,uint16_t phone, const uint8_t *table, char *string, uint8_t size)
 {
-   //���������� ����� ������ ����� ������ ���� �����, ��� ��� ������ ������������� ����
+
 	while(*string)
 	{      
-    //��������� �� ������� �� �� �� ������� ������ ��� ��������� ���������� �������,
-    // ���� ��, �� ��������� �� ��������� �������
 		if((x + 8) > (TFT_WIDTH-1))
 		{
 			x = 1;
 			y = y + 8*size;
 		}
-		TFT_Draw_Char(x, y, color, phone, table, *string, size);//������������ ������
-		x += 8*size;     //�������� ���������� ��� ��������� ���������� �������
-		*string++;           //����������� �������� ���������, ����� �� �������� �� ��������� ������
+		TFT_Draw_Char(x, y, color, phone, table, *string, size);
+		x += 8*size;
+		*string++;
 	}
 }
 
-//�-��� ������ ����� ��������� ����� � �������
+
 void TFT_Draw_Line (uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2, uint8_t size,uint16_t color)
 {
 	int deltaX = abs(x2 - x1);
@@ -785,27 +337,26 @@ void TFT_Draw_Line (uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2, uint8_t siz
 	}
 }
 
-//�-��� ������ �������������� �����, ��������� �����, ������� � �����
+
 void TFT_Draw_HLine(uint16_t x, uint16_t y, uint16_t length, uint16_t size, uint16_t color)
 {
 	uint16_t i=0;
 	
 	TFT_Set_Work_Area(x,y,length,size);
 	for(i=0; i<(length*size); i++)
-	TFT_Write_Data(color);
+	Lcd_Write_Data(color);
 }
 
-//�-��� ������ ������������ �����, ��������� �����, ������� � �����
 void TFT_Draw_VLine(uint16_t x, uint16_t y, uint16_t length, uint16_t size, uint16_t color)
 {
 	uint16_t i=0;
 	
 	TFT_Set_Work_Area(x,y,size,length);
 	for(i=0; i<(length*size); i++)
-	TFT_Write_Data(color);
+	Lcd_Write_Data(color);
 }
 
-//�-��� ������ �������������, ��������� �����, ������, ������� ����� � �����
+
 void TFT_Draw_Rectangle(uint16_t x, uint16_t y, uint16_t length, uint16_t width, uint8_t size, uint16_t color)
 {
 	TFT_Draw_HLine(x, y, length, size, color);
@@ -814,7 +365,7 @@ void TFT_Draw_Rectangle(uint16_t x, uint16_t y, uint16_t length, uint16_t width,
 	TFT_Draw_VLine(x + length - size, y, width, size, color);
 }
 
-//�-��� ������ ����������� �������������, ��������� �����, ������, �����
+
 void TFT_Draw_Fill_Rectangle(uint16_t x, uint16_t y, uint16_t length, uint16_t width, uint16_t color)
 {
 	uint32_t i=0;
@@ -822,11 +373,11 @@ void TFT_Draw_Fill_Rectangle(uint16_t x, uint16_t y, uint16_t length, uint16_t w
 	TFT_Set_Work_Area(x,y,length, width);
 	for(i=0; i < length*width; i++)
 	{
-		TFT_Write_Data(color);	//������� ��������� �����
+		Lcd_Write_Data(color);
 	}
 }
 
-//�-��� ������ ����������� �� ������ � ��������� �������� ����� � ��������� ������
+
 void TFT_Draw_Triangle( uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t x3, uint16_t y3, uint8_t size, uint16_t color)
 {
 	
@@ -835,8 +386,7 @@ void TFT_Draw_Triangle( uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint
 	TFT_Draw_Line( x3, y3, x1, y1, color, size);
 }
 
-//�-��� ������ ���������� ������� �������, ������ �������� ������� � ��������� ������, ����� �������� 
-//������ ���������� ������ ������ ��� ����� ���������� �������� fill ������ �������, ����� ����
+
 void TFT_Draw_Circle(uint16_t x, uint16_t y, uint8_t radius, uint8_t fill, uint8_t size, uint16_t color)
 {
 	int a_,b_,P;
@@ -875,7 +425,7 @@ void TFT_Draw_Circle(uint16_t x, uint16_t y, uint8_t radius, uint8_t fill, uint8
 	}
 }
 
-//��������������� �-��� ��� ����������� ���� ��������������
+
 void TFT_Draw_Circle_Helper( int16_t x0, int16_t y0, int16_t r, uint8_t cornername, uint8_t size, uint16_t color)
 {
   int16_t f     = 1 - r;
@@ -912,7 +462,7 @@ void TFT_Draw_Circle_Helper( int16_t x0, int16_t y0, int16_t r, uint8_t cornerna
   }
 }
 
-//�-��� ������ ������������� �������� �����, ������, �������� ����������� ����, ������� ����� � ��������� ������
+
 void TFT_Draw_Round_Rect(uint16_t x, uint16_t y, uint16_t length, uint16_t width, uint16_t r, uint8_t size, uint16_t color)
 {
 
@@ -927,7 +477,7 @@ void TFT_Draw_Round_Rect(uint16_t x, uint16_t y, uint16_t length, uint16_t width
   TFT_Draw_Circle_Helper(x+r    , y+width-r-1, r, 			8, size, color);
 }
 
-//��������������� �-��� ��� ����������� ���� ������������ ��������������
+
 void TFT_Draw_Fill_Circle_Helper(int16_t x0, int16_t y0, int16_t r, uint8_t cornername, int16_t delta, uint16_t color) 
 {
 
@@ -958,7 +508,7 @@ void TFT_Draw_Fill_Circle_Helper(int16_t x0, int16_t y0, int16_t r, uint8_t corn
   }
 }
 
-//�-��� ������ ����������� ������������� �������� �����, ������, �������� ����������� ����� � ��������� ������
+
 void TFT_Draw_Fill_Round_Rect(uint16_t x, uint16_t y, uint16_t length, uint16_t width, uint16_t r, uint16_t color)
 {
   TFT_Draw_Fill_Rectangle(x+r, y, length-2*r, width, color);
@@ -1184,10 +734,6 @@ int ringMeter(int value, int vmin, int vmax, int x, int y, int r, uint16_t schem
     int y3 = sy2 * r + y;
 
     if (i < v) { // Fill in coloured segments with 2 triangles
-//      my_lcd.Set_Draw_color(colour);
-//      my_lcd.Fill_Triangle(x0, y0, x1, y1, x2, y2);
-//      my_lcd.Fill_Triangle(x1, y1, x2, y2, x3, y3);
-//      text_colour = colour; // Save the last colour drawn
 
     	LCD_FillTriangle(x0, y0, x1, y1, x2, y2, colour);
     	LCD_FillTriangle(x1, y1, x2, y2, x3, y3, colour);
@@ -1195,9 +741,6 @@ int ringMeter(int value, int vmin, int vmax, int x, int y, int r, uint16_t schem
     }
     else // Fill in blank segments
     {
-//      my_lcd.Set_Draw_color(GRAY);
-//      my_lcd.Fill_Triangle(x0, y0, x1, y1, x2, y2);
-//      my_lcd.Fill_Triangle(x1, y1, x2, y2, x3, y3);
 
     	LCD_FillTriangle(x0, y0, x1, y1, x2, y2, BLUE);
     	LCD_FillTriangle(x1, y1, x2, y2, x3, y3, BLUE);
@@ -1206,26 +749,6 @@ int ringMeter(int value, int vmin, int vmax, int x, int y, int r, uint16_t schem
 
 
   }
-  // Convert value to a string
-//  char buf[10];
-//  uint16_t len = 4; if (value > 999) len = 5;
-//  dtostrf(value, len, 0, buf);
 
-//  my_lcd.Set_Draw_color(0, 0,0);
-//  LCD_FillRect(x-60, y-15, x+60, y+20,BLACK);
-
-  // Set the text colour to default
-//  my_lcd.Set_Text_colour(WHITE);
-//  my_lcd.Set_Text_Back_colour(BLACK);
-//  my_lcd.Set_Text_Size(5);
-//  if (value>999){
-//    my_lcd.Print_String(String(value), x-60, y-15);
-//  } else if (value>99 && value<1000){
-//    my_lcd.Print_String(String(value), x-45, y-15);
-//  } else if (value>9 && value<100){
-//    my_lcd.Print_String(String(value), x-30, y-15);
-//  } else {
-//    my_lcd.Print_String(String(value), x-15, y-15);
-//  }
   return x + r;
 }

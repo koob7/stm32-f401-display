@@ -221,6 +221,10 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+    //void TFT_Draw_Round_Rect(uint16_t x, uint16_t y, uint16_t length, uint16_t width, uint16_t r, uint8_t size, uint16_t color)
+    //void TFT_Draw_Fill_Rectangle(uint16_t x, uint16_t y, uint16_t length, uint16_t width, uint16_t color)
+    TFT_Draw_Fill_Rectangle (50, 300, 80, 80, BLUE);
+    TFT_Draw_Round_Rect (700, 300, 80, 80, 10, 10, BLUE);
   while (1)
   {
 	  //	  TFT_Clear_Screen(YELLOW);
