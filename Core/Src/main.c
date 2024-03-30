@@ -223,8 +223,17 @@ int main(void)
   /* USER CODE BEGIN WHILE */
     //void TFT_Draw_Round_Rect(uint16_t x, uint16_t y, uint16_t length, uint16_t width, uint16_t r, uint8_t size, uint16_t color)
     //void TFT_Draw_Fill_Rectangle(uint16_t x, uint16_t y, uint16_t length, uint16_t width, uint16_t color)
+    TFT_Draw_Fill_Rectangle (300, 300, 80, 80, BLUE);
     TFT_Draw_Fill_Rectangle (50, 300, 80, 80, BLUE);
-    TFT_Draw_Round_Rect (700, 300, 80, 80, 10, 10, BLUE);
+    LCD_Font(50, 300, "hej", _Open_Sans_Bold_10, 1, WHITE);
+    TFT_Draw_Fill_Round_Rect (700, 300, 80, 80, 10,  BLUE);
+    LCD_Font(700, 350, "nArA", _Open_Sans_Bold_10, 2, WHITE);
+    TFT_Draw_Circle(300, 340, 40, 1, 10, WHITE);
+
+    int allertX = 220;	//MAX size is 220x200 - with bigger tabs malloc has problem
+    int allertY = 200;
+    uint16_t *save = (uint16_t *)malloc(allertX* allertY * sizeof(uint16_t));
+
   while (1)
   {
 	  //	  TFT_Clear_Screen(YELLOW);
@@ -243,11 +252,16 @@ int main(void)
 	  	  					 		  LCD_Font(190, 165, string, _Open_Sans_Bold_48, 1, WHITE);
 
 
-	  	  						 		ringMeter(j, 0, 1020, 400, 20, 140, GREEN2RED);
+/*	  	  						 		ringMeter(j, 0, 1020, 400, 20, 140, GREEN2RED);
 	  	  						 		sprintf(string, "%.1f", j/8.5);
 	  	  						 		TFT_Draw_Fill_Rectangle(490,115, 100, 50,BLACK);
-	  	  						 		  LCD_Font(490, 165, string, _Open_Sans_Bold_48, 1, WHITE);
+	  	  						 		  LCD_Font(490, 165, string, _Open_Sans_Bold_48, 1, WHITE);*/
 	  	  					 	  }
+
+	  	  					TFT_Draw_Alert (allertX, allertY, "nowy allert",  save, _Open_Sans_Bold_20);
+	  	  					HAL_Delay(3000);
+	  	  					TFT_Restore_Alert(allertX, allertY, save);
+
 
 
 	  	  //	  LCD_Font(0, 200, string, _Open_Sans_Bold_26, 1, YELLOW);

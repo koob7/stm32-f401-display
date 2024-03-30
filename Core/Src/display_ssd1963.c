@@ -4,6 +4,9 @@
 #include <string.h>
 #include "math.h"
 
+
+
+
 uint16_t RGB(uint8_t r, uint8_t g, uint8_t b)
 {
 	return ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3);
@@ -253,6 +256,8 @@ void TFT_Set_Work_Area(uint16_t x, uint16_t y, uint16_t length, uint16_t width)
 }
 
 
+
+
 void TFT_Clear_Screen(uint16_t color)
 {
 	uint32_t i=0;
@@ -260,8 +265,6 @@ void TFT_Clear_Screen(uint16_t color)
 	pin_high(RS_PORT,RS_PIN);
 	for(i=0; i < 384000; i++)
 	{
-
-
 		  tft_write_bus(color>>8,color&0x00ff);
 	}
 }
@@ -346,6 +349,69 @@ void TFT_Draw_HLine(uint16_t x, uint16_t y, uint16_t length, uint16_t size, uint
 	for(i=0; i<(length*size); i++)
 	Lcd_Write_Data(color);
 }
+
+void TFT_Set_Read_Area(uint16_t x, uint16_t y, uint16_t length, uint16_t width)
+{
+	TFT_Set_X(x, x+length-1);
+	TFT_Set_Y(y, y+width-1);
+	Lcd_Write_Cmd(0x2E);
+}
+
+void TFT_Draw_Alert (uint16_t length, uint16_t width, char *text,  uint16_t *save, const GFXfont *p_font)
+{
+
+	uint32_t i=0;
+	lcd_Read_Area(TFT_WIDTH/2-(length/2), TFT_HEIGHT/2-(width/2), length, width, save);
+    TFT_Draw_Fill_Round_Rect (TFT_WIDTH/2-(length/2), TFT_HEIGHT/2-(width/2), length, width, 20,  0xd699);
+    TFT_Draw_Fill_Round_Rect (TFT_WIDTH/2-(length/2), TFT_HEIGHT/2-(width/2), length, 60, 20,  0xe266);
+    LCD_Font(TFT_WIDTH/2-30, TFT_HEIGHT/2-(width/2)+40, "ALERT", p_font, 1, BLACK);
+
+}
+
+void TFT_Restore_Alert (uint16_t length, uint16_t width, uint16_t *save)
+{
+	uint32_t i=0;
+	TFT_Set_Work_Area(TFT_WIDTH/2-(length/2), TFT_HEIGHT/2-(width/2), length, width);
+	for(i=0; i < length*width; i++)
+	{
+		Lcd_Write_Data(save[i]);
+	}
+}
+
+void lcd_Read_Area(uint16_t x, uint16_t y, uint16_t length, uint16_t width, uint16_t *save)
+{
+	uint32_t i=0;
+	TFT_Set_Read_Area(x, y, length, width);
+	PORTA->MODER = (PORTA->MODER & 0xffff0000);
+	PORTB->MODER = (PORTB->MODER & 0xffff0000);
+	pin_high(RS_PORT,RS_PIN);
+
+	for(i=0; i < length*width; i++)
+	{
+		save[i] = lcd_Read_bus();
+	}
+
+	PORTA->MODER = (PORTA->MODER | 0x00005555);
+	PORTB->MODER = (PORTB->MODER | 0x00005555);
+}
+
+uint16_t lcd_Read_bus()
+{
+
+	pin_low(RD_PORT,RD_PIN);
+	pin_high(RD_PORT,RD_PIN);
+	uint8_t high_byte =PORTB->IDR ;
+	uint8_t low_byte =PORTA->IDR ;
+
+
+
+/*	uint8_t low_byte =0 ;
+	uint8_t high_byte =0 ;*/
+
+	return ((high_byte<<8)|low_byte);
+}
+
+
 
 void TFT_Draw_VLine(uint16_t x, uint16_t y, uint16_t length, uint16_t size, uint16_t color)
 {
