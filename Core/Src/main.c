@@ -151,66 +151,35 @@ int main(void)
 
 
   //  XPT2046_Init();
-    TFT_Clear_Screen(RED);
-    LCD_Font(120, 450, "SSD1963", _Open_Sans_Bold_128, 1, RED);
-  	for(int i = 0; i<360; i+= 30) {
+    TFT_Clear_Screen(0xCFFF);
+    TFT_Draw_Fill_Rectangle(100,0, 600, 144, 0xD61F);//niebieska ramka
+    TFT_Draw_Fill_Rectangle(0,0, 20, 20, 0x8C51);//szare prostokąty z prawej i lewej
+    TFT_Draw_Fill_Rectangle(0,460, 20, 20, 0x8C51);
+    TFT_Draw_Fill_Rectangle(780,0, 20, 20, 0x8C51);
+    TFT_Draw_Fill_Rectangle(780,460, 20, 20, 0x8C51);
+    TFT_Draw_Fill_Round_Rect (0, 0, 120, 480, 20, 0x8C51);
+    TFT_Draw_Fill_Round_Rect (680, 0, 120, 480, 20, 0x8C51);
+    uint16_t pos_y = 9;
+    for(uint8_t i = 0; i<7;i+=1)//przyciski po prawej
+    {
+    TFT_Draw_Fill_Round_Rect (696, pos_y, 88, 47, 10,  0xD6BA);
+    TFT_Draw_Fill_Rectangle(740,pos_y, 2, 47, 0x0000);
+    LCD_centered_Font(696, pos_y+24, 88, "+   -", _Open_Sans_Bold_48, 1, 0x4A69);
+    pos_y+=56;
+    }
 
-  	    sx = cos((i-90)*0.0174532925);
-  	    sy = sin((i-90)*0.0174532925);
-  	    x00 = sx*114+240;
-  	    y00 = sy*114+160;
-  	    x11 = sx*100+240;
-  	    y11 = sy*100+160;
+    TFT_Draw_Fill_Round_Rect (696, 413, 88, 47, 10,  0xD6BA);
+    TFT_Draw_Fill_Rectangle(740, 413, 2, 47, 0x0000);
+    LCD_centered_Font(696, 413+24, 88, "+   -", _Open_Sans_Bold_48, 1, 0x4A69);
 
-  	    TFT_Draw_Line(x00-1, y00-1, x11, y11,1,WHITE);
-  	    if (i == 150) {
-  	    	TFT_Draw_Line(x00, y00, x11, y11,1,BLACK);
-  	    }
-  	  }
-
-  	LCD_Font(235, 254, "0", _Open_Sans_Bold_18, 1, WHITE);
-  	LCD_Font(193, 240, "10", _Open_Sans_Bold_18, 1, WHITE);
-  	LCD_Font(158, 210, "20", _Open_Sans_Bold_18, 1, WHITE);
-  	LCD_Font(142, 165, "30", _Open_Sans_Bold_18, 1, WHITE);
-  	LCD_Font(155, 120, "40", _Open_Sans_Bold_18, 1, WHITE);
-  	LCD_Font(185, 91, "50", _Open_Sans_Bold_18, 1, WHITE);
-  	LCD_Font(230, 76, "60", _Open_Sans_Bold_18, 1, WHITE);
-  	LCD_Font(275, 91, "70", _Open_Sans_Bold_18, 1, WHITE);
-  	LCD_Font(300, 120, "80", _Open_Sans_Bold_18, 1, WHITE);
-  	LCD_Font(315, 165, "90", _Open_Sans_Bold_18, 1, WHITE);
-  	LCD_Font(290, 215, "100", _Open_Sans_Bold_18, 1, WHITE);
-  	LCD_Font(228, 210, "C", _Open_Sans_Bold_48, 1, WHITE);
+    LCD_centered_Font(696, 9+25, 88, "X", _Open_Sans_Bold_48, 1, 0x7D3D);//literki po prawej
+    LCD_centered_Font(696, 65+25, 88, "Y", _Open_Sans_Bold_48, 1, 0x7D3D);
+    LCD_centered_Font(696, 121+25, 88, "Z", _Open_Sans_Bold_48, 1, 0x7D3D);
+    LCD_centered_Font(696, 177+25, 88, "A", _Open_Sans_Bold_48, 1, 0x7D3D);
+    LCD_centered_Font(696, 233+25, 88, "B", _Open_Sans_Bold_48, 1, 0x7D3D);
+    LCD_centered_Font(696, 289+25, 88, "C", _Open_Sans_Bold_48, 1, 0x7D3D);
 
 
-
-
-  	for(int i = 0; i<360; i+= 30) {
-
-  	    sx = cos((i-90)*0.0174532925);
-  	    sy = sin((i-90)*0.0174532925);
-  	    x00 = sx*114+540;  //240
-  	    y00 = sy*114+160;
-  	    x11 = sx*100+540;   //240
-  	    y11 = sy*100+160;
-
-  	    TFT_Draw_Line(x00-1, y00-1, x11, y11,1,WHITE);
-  	    if (i == 150) {
-  	    	TFT_Draw_Line(x00, y00, x11, y11,1,BLACK);
-  	    }
-  	  }
-
-  	LCD_Font(535, 254, "0", _Open_Sans_Bold_18, 1, WHITE);
-  	LCD_Font(493, 240, "10", _Open_Sans_Bold_18, 1, WHITE);
-  	LCD_Font(458, 210, "20", _Open_Sans_Bold_18, 1, WHITE);
-  	LCD_Font(442, 165, "30", _Open_Sans_Bold_18, 1, WHITE);
-  	LCD_Font(455, 120, "40", _Open_Sans_Bold_18, 1, WHITE);
-  	LCD_Font(485, 91, "50", _Open_Sans_Bold_18, 1, WHITE);
-  	LCD_Font(530, 76, "60", _Open_Sans_Bold_18, 1, WHITE);
-  	LCD_Font(575, 91, "70", _Open_Sans_Bold_18, 1, WHITE);
-  	LCD_Font(600, 120, "80", _Open_Sans_Bold_18, 1, WHITE);
-  	LCD_Font(615, 165, "90", _Open_Sans_Bold_18, 1, WHITE);
-  	LCD_Font(590, 215, "100", _Open_Sans_Bold_18, 1, WHITE);
-  	LCD_Font(528, 210, "C", _Open_Sans_Bold_48, 1, WHITE);
   //	touchx = getX();
   //	  	touchy = getY();
   //	  	sprintf(string,"x=%3d y=%3d",touchx,touchy);
@@ -221,14 +190,13 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-    //void TFT_Draw_Round_Rect(uint16_t x, uint16_t y, uint16_t length, uint16_t width, uint16_t r, uint8_t size, uint16_t color)
-    //void TFT_Draw_Fill_Rectangle(uint16_t x, uint16_t y, uint16_t length, uint16_t width, uint16_t color)
-    TFT_Draw_Fill_Rectangle (300, 300, 80, 80, BLUE);
+
+    /*TFT_Draw_Fill_Rectangle (300, 300, 80, 80, BLUE);
     TFT_Draw_Fill_Rectangle (50, 300, 80, 80, BLUE);
     LCD_Font(50, 300, "hej", _Open_Sans_Bold_10, 1, WHITE);
     TFT_Draw_Fill_Round_Rect (700, 300, 80, 80, 10,  BLUE);
     LCD_Font(700, 350, "nArA", _Open_Sans_Bold_10, 2, WHITE);
-    TFT_Draw_Circle(300, 340, 40, 1, 10, WHITE);
+    TFT_Draw_Circle(300, 340, 40, 1, 10, WHITE);*/
 
     int allertX = 220;	//MAX size is 220x200 - with bigger tabs malloc has problem
     int allertY = 200;
@@ -236,11 +204,7 @@ int main(void)
 
   while (1)
   {
-	  //	  TFT_Clear_Screen(YELLOW);
-	  	  //	  TFT_Clear_Screen(RED);
-	  	  //	  TFT_Clear_Screen(GREEN);
-	  	  //	  TFT_Clear_Screen(BLUE);
-	  	  //	  TFT_Clear_Screen(RED);
+
 
 
 
@@ -258,9 +222,9 @@ int main(void)
 	  	  						 		  LCD_Font(490, 165, string, _Open_Sans_Bold_48, 1, WHITE);*/
 	  	  					 	  }
 
-	  	  					TFT_Draw_Alert (allertX, allertY, "nowy allert",  save, _Open_Sans_Bold_20);
+	  	  					TFT_Draw_Alert (allertX, allertY, "to jest przykladowy alert do celow demonstracyjnych i testowych",  save, _Open_Sans_Bold_20);
 	  	  					HAL_Delay(3000);
-	  	  					TFT_Restore_Alert(allertX, allertY, save);
+	  	  					TFT_Restore_Area(allertX, allertY, save);
 
 
 

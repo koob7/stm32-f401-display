@@ -212,7 +212,10 @@ typedef struct { // Data stored for FONT AS A WHOLE:
 	uint8_t   yAdvance;    // Newline distance (y axis)
 } GFXfont;
 
-
+typedef enum {
+    FALSE = 0,
+    TRUE = !FALSE
+} bool;
 
 
 extern const uint8_t font8x8[][8];
@@ -233,7 +236,10 @@ uint16_t lcd_Read_bus();
 void TFT_Draw_Alert (uint16_t length, uint16_t width, char *text,  uint16_t *save, const GFXfont *p_font);
 void TFT_Set_Read_Area(uint16_t x, uint16_t y, uint16_t length, uint16_t width);
 void lcd_Read_Area(uint16_t x, uint16_t y, uint16_t length, uint16_t width, uint16_t *save);
-void TFT_Restore_Alert (uint16_t length, uint16_t width, uint16_t *save);
+void TFT_Restore_Area (uint16_t length, uint16_t width, uint16_t *save);
+
+void LCD_centered_Font (uint16_t x, uint16_t y,  uint16_t length,  char *text, const GFXfont *p_font, uint8_t size, uint32_t color24);
+void LCD_Row_Font(uint16_t x, uint16_t y, uint16_t start, uint16_t end, char *text, const GFXfont *p_font, uint8_t size, uint32_t color24);
 
 
 void TFT_Set_XY(uint16_t x, uint16_t y);
