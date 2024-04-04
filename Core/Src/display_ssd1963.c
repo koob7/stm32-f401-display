@@ -358,6 +358,55 @@ void TFT_Set_Read_Area(uint16_t x, uint16_t y, uint16_t length, uint16_t width)
 	Lcd_Write_Cmd(0x2E);
 }
 
+uint16_t TFT_Draw_List(uint16_t x, uint16_t y, uint16_t width, char *title, char * options,  uint16_t *save, const GFXfont *p_font)
+{
+	uint16_t height=47+1+34;
+	uint16_t counter = 0;
+	uint16_t start=0;
+	uint16_t line_y_pos=y+48;
+
+	for(uint16_t text_pos = 0; text_pos < strlen(options); text_pos++)
+	{
+		if (options[text_pos ]== ' ')
+			counter+=1;
+	}
+
+	height+=35*counter;
+	lcd_Read_Area(x, y, width, height, save);
+	TFT_Draw_Fill_Round_Rect (x, y, width, height, 20,  0xDEDB);
+	LCD_centered_Font (x, y+23,  width, title, p_font, 2,  BLACK);
+	TFT_Draw_HLine(x, line_y_pos, width,  1, 	0xB5B6);
+	while(counter>0)
+	{
+		line_y_pos+=35;
+		TFT_Draw_HLine(x, line_y_pos, width,  1, 	0xB5B6);
+		counter-=1;
+	}
+	for(uint16_t text_pos = 0; text_pos < strlen(options); text_pos++)
+	{
+		if (options[text_pos ]== ' ')
+		{
+/*			char temp[50];
+			strncpy(temp, options + start, text_pos - start);
+			temp[text_pos - start] = '\0'; // Dodanie zakończenia ciągu
+			 LCD_centered_Font(x, y + 47 + 17 + counter * 35, width, temp, p_font, 1,  BLACK);*/
+			char newString[text_pos-start];
+			memcpy(newString, options+start*sizeof(char), text_pos-start);
+			newString[text_pos - start] = '\0';
+		    LCD_centered_Font (x, y+47+17+counter*35,  width, newString, p_font, 1,  BLACK);
+			start=text_pos;
+			counter+=1;
+		}
+	}
+	char newString[strlen(options)-start];
+	memcpy(newString, options+start*sizeof(char), strlen(options)-start);
+	newString[strlen(options) - start] = '\0';
+    LCD_centered_Font (x, y+47+17+counter*35,  width, newString, p_font, 1,  BLACK);
+	//LCD_centered_Font (x, y+47+17+counter*35,  length, memcopy(options, start, strlen(options)), p_font, 1,  BLACK);
+
+	return counter;
+}
+
 void TFT_Draw_Alert (uint16_t length, uint16_t width, char *text,  uint16_t *save, const GFXfont *p_font)
 {
 
@@ -366,15 +415,15 @@ void TFT_Draw_Alert (uint16_t length, uint16_t width, char *text,  uint16_t *sav
     TFT_Draw_Fill_Round_Rect (TFT_WIDTH/2-(length/2), TFT_HEIGHT/2-(width/2), length, width, 20,  0xd699);
     TFT_Draw_Fill_Round_Rect (TFT_WIDTH/2-(length/2), TFT_HEIGHT/2-(width/2), length, 60, 20,  0xe266);
     //LCD_Font(TFT_WIDTH/2-30, TFT_HEIGHT/2-(width/2)+40, "ALERT", p_font, 1, BLACK);
-    LCD_centered_Font (TFT_WIDTH/2-(length/2), TFT_HEIGHT/2-(width/2)+30,  length, "ALERT", p_font, 1,  BLACK);
+    LCD_centered_Font (TFT_WIDTH/2-(length/2), TFT_HEIGHT/2-(width/2)+30,  length, "ALERT", p_font, 2,  BLACK);
     LCD_centered_Font (TFT_WIDTH/2-(length/2), TFT_HEIGHT/2-(width/2)+80,  length,  text, p_font, 1,  BLACK);
 
 }
 
-void TFT_Restore_Area (uint16_t length, uint16_t width, uint16_t *save)
+void TFT_Restore_Area (uint16_t x, uint16_t y, uint16_t length, uint16_t width, uint16_t *save)
 {
 	uint32_t i=0;
-	TFT_Set_Work_Area(TFT_WIDTH/2-(length/2), TFT_HEIGHT/2-(width/2), length, width);
+	TFT_Set_Work_Area(x, y, length, width);
 	for(i=0; i < length*width; i++)
 	{
 		Lcd_Write_Data(save[i]);
@@ -414,7 +463,36 @@ uint16_t lcd_Read_bus()
 	return ((high_byte<<8)|low_byte);
 }
 
+void TFT_Draw_Bitmap_Without_Background(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t *array)
+{
+	uint16_t color, color_R, color_G, color_B;
+	for(int i =0;i<height;i+=1)
+	{
+		for(int b =0;b<width;b+=1)
+		{
+			color=array[i*width+b];
+			color_R=(0xF800&color)>>11;
+			color_G=(0x7E0&color)>>5;
+			color_B=0x1F&color;
+			if (!(color_R>26&&color_G>53&&color_B>26))
+			{
+				Lcd_SetPixel(x+b,y+i, color);
+			}
+		}
+	}
+}
 
+void TFT_Draw_Bitmap(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t *array)
+{
+	TFT_Set_Work_Area(x, y, width, height);
+	for(int i =0;i<height;i+=1)
+	{
+		for(int b =0;b<width;b+=1)
+		{
+				Lcd_Write_Data(array[i*width+b]);
+		}
+	}
+}
 
 void TFT_Draw_VLine(uint16_t x, uint16_t y, uint16_t length, uint16_t size, uint16_t color)
 {
@@ -711,10 +789,11 @@ void LCD_Row_Font(uint16_t x, uint16_t y, uint16_t start, uint16_t end, char *te
 
 void LCD_Font(uint16_t x, uint16_t y, char *text, const GFXfont *p_font, uint8_t size, uint32_t color24)
 {
-	int16_t cursor_x = x;
-	int16_t cursor_y = y;
+
 	GFXfont font;
 	memcpy((&font), (p_font), (sizeof(GFXfont)));
+	int16_t cursor_x = x;
+	int16_t cursor_y = y+ (font.yAdvance*size)/4;
 	for(uint16_t text_pos = 0; text_pos < strlen(text); text_pos++)
 	{
 		char c = text[text_pos];

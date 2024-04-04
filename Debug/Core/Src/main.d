@@ -42,7 +42,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  C:/Users/kobie/STM32CubeIDE/workspace_1.13.2/stm32f401cdu6\ -\ first\ test/fonts/072_Open_Sans_Bold.h \
  C:/Users/kobie/STM32CubeIDE/workspace_1.13.2/stm32f401cdu6\ -\ first\ test/fonts/096_Open_Sans_Bold.h \
  C:/Users/kobie/STM32CubeIDE/workspace_1.13.2/stm32f401cdu6\ -\ first\ test/fonts/112_Open_Sans_Bold.h \
- C:/Users/kobie/STM32CubeIDE/workspace_1.13.2/stm32f401cdu6\ -\ first\ test/fonts/128_Open_Sans_Bold.h
+ C:/Users/kobie/STM32CubeIDE/workspace_1.13.2/stm32f401cdu6\ -\ first\ test/fonts/128_Open_Sans_Bold.h \
+ ../Core/Inc/bitmap_arrays.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -90,3 +91,4 @@ C:/Users/kobie/STM32CubeIDE/workspace_1.13.2/stm32f401cdu6\ -\ first\ test/fonts
 C:/Users/kobie/STM32CubeIDE/workspace_1.13.2/stm32f401cdu6\ -\ first\ test/fonts/096_Open_Sans_Bold.h:
 C:/Users/kobie/STM32CubeIDE/workspace_1.13.2/stm32f401cdu6\ -\ first\ test/fonts/112_Open_Sans_Bold.h:
 C:/Users/kobie/STM32CubeIDE/workspace_1.13.2/stm32f401cdu6\ -\ first\ test/fonts/128_Open_Sans_Bold.h:
+../Core/Inc/bitmap_arrays.h:
