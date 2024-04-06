@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "spi.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -126,7 +127,7 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+	//NVIC_DisableIRQ(EXTI15_10_IRQn);
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -147,11 +148,14 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
   Init_SSD1963();
+  //XPT2046_Init();
 
+  //NVIC_DisableIRQ(EXTI15_10_IRQn);
+  //EXTI->IMR &= 0xff;
 
-  //  XPT2046_Init();
   uint16_t pos_y;
     TFT_Clear_Screen(0xCFFF);
     TFT_Draw_Fill_Rectangle(100,0, 600, 144, 0xD61F);//niebieska ramka
@@ -256,7 +260,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-
+	NVIC_EnableIRQ(EXTI15_10_IRQn);
     /*TFT_Draw_Fill_Rectangle (300, 300, 80, 80, BLUE);
     TFT_Draw_Fill_Rectangle (50, 300, 80, 80, BLUE);
     LCD_Font(50, 300, "hej", _Open_Sans_Bold_10, 1, WHITE);
@@ -271,16 +275,35 @@ int main(void)
 
   while (1)
   {
+	  	NVIC_DisableIRQ(EXTI15_10_IRQn);
+		TFT_Draw_Fill_Round_Rect (280, 180, 200, 60, 10,  0xCFFF);
+	 	char buffer1[10]; // Bufor na konwertowaną wartość
+	 	char buffer2[10]; // Bufor na konwertowaną wartość
+	 	uint16_t touchx = getX();
 
-	  	  	  	  	  	  	HAL_Delay(1000);
+	 	sprintf(buffer1, "X%d", touchx); // Konwersja wartości do ciągu znaków
+	 	uint16_t touchy = getY();
+	 	sprintf(buffer2, "Y%d", touchy); // Konwersja wartości do ciągu znaków
+	 	LCD_Font(300, 200,  buffer1, _Open_Sans_Bold_28, 1, BLACK);
+	 	LCD_Font(300, 220,  buffer2, _Open_Sans_Bold_28, 1, BLACK);
+	 	HAL_Delay(100);
+/*
+	 	XPT2046_Init();
+	 	HAL_Delay(300);
+	 	uint16_t touchy = getY();
+*/
+
+	 	//NVIC_EnableIRQ(EXTI15_10_IRQn);
+
+	 	if(touchx >=696 && touchx<=696+88 && touchy>=9 && touchy<=9+47)// 696, pos_y, 88, 47,
+	 		  		{
+	  	  	  	  	  	  	//HAL_Delay(1000);
 	  	  	  	  	  	  	uint16_t counter = TFT_Draw_List(400, 200, 100, "TYPE:", "powitanie",  save, _Open_Sans_Bold_14);
 	  	  	  	  	  	  	HAL_Delay(1000);
 	  	  	  	  	  	  	TFT_Restore_Area(400, 200, 100, 47+1+34+35*counter, save);
+	 		  		}
 
-							HAL_Delay(1000);
-							uint16_t counter2 = TFT_Draw_List(400, 200, 100, "TYPE:", "hejka bajo narka",  save, _Open_Sans_Bold_14);
-							HAL_Delay(1000);
-							TFT_Restore_Area(400, 200, 100, 47+1+34+35*counter2, save);
+							/*
 
 							HAL_Delay(1000);
 							uint16_t counter3 = TFT_Draw_List(400, 200, 100, "TYPE:", "placek ciastko lody lizak",  save, _Open_Sans_Bold_14);
@@ -294,7 +317,7 @@ int main(void)
 	  	  	  	  	  	  	HAL_Delay(3000);
 	  	  					TFT_Draw_Alert (allertX, allertY, "to jest przykladowy alert do celow demonstracyjnych i testowych",  save, _Open_Sans_Bold_20);
 	  	  					HAL_Delay(3000);
-	  	  					TFT_Restore_Area(TFT_WIDTH/2-(allertX/2), TFT_HEIGHT/2-(allertY/2), allertX, allertY, save);
+	  	  					TFT_Restore_Area(TFT_WIDTH/2-(allertX/2), TFT_HEIGHT/2-(allertY/2), allertX, allertY, save);*/
 
 
 
@@ -363,7 +386,15 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
 
+	if(GPIO_Pin == T_IRQ_Pin)
+	{
+		TFT_Draw_Fill_Round_Rect (280, 180, 200, 60, 10,  BLACK);
+		HAL_Delay(100);
+	}
+}
 /* USER CODE END 4 */
 
 /**

@@ -24,7 +24,9 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
- ../Core/Inc/gpio.h ../Core/Inc/main.h ../Core/Inc/display_ssd1963.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h \
+ ../Core/Inc/spi.h ../Core/Inc/main.h ../Core/Inc/gpio.h \
+ ../Core/Inc/display_ssd1963.h \
  C:/Users/kobie/STM32CubeIDE/workspace_1.13.2/stm32f401cdu6\ -\ first\ test/fonts/008_Open_Sans_Bold.h \
  C:/Users/kobie/STM32CubeIDE/workspace_1.13.2/stm32f401cdu6\ -\ first\ test/fonts/009_Open_Sans_Bold.h \
  C:/Users/kobie/STM32CubeIDE/workspace_1.13.2/stm32f401cdu6\ -\ first\ test/fonts/010_Open_Sans_Bold.h \
@@ -70,8 +72,10 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h:
-../Core/Inc/gpio.h:
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h:
+../Core/Inc/spi.h:
 ../Core/Inc/main.h:
+../Core/Inc/gpio.h:
 ../Core/Inc/display_ssd1963.h:
 C:/Users/kobie/STM32CubeIDE/workspace_1.13.2/stm32f401cdu6\ -\ first\ test/fonts/008_Open_Sans_Bold.h:
 C:/Users/kobie/STM32CubeIDE/workspace_1.13.2/stm32f401cdu6\ -\ first\ test/fonts/009_Open_Sans_Bold.h:

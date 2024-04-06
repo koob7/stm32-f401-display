@@ -83,6 +83,9 @@ void Error_Handler(void);
 #define REST_GPIO_Port GPIOA
 #define CS_Pin GPIO_PIN_9
 #define CS_GPIO_Port GPIOA
+#define T_IRQ_Pin GPIO_PIN_10
+#define T_IRQ_GPIO_Port GPIOA
+#define T_IRQ_EXTI_IRQn EXTI15_10_IRQn
 #define RS_Pin GPIO_PIN_15
 #define RS_GPIO_Port GPIOA
 #define D11_Pin GPIO_PIN_3
