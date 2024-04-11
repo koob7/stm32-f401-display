@@ -16,11 +16,14 @@ inline static float remap(float x, float in_min, float in_max, float out_min, fl
 
 void XPT2046_Init(void)
 {
+	uint8_t data;
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, GPIO_PIN_RESET);
+	HAL_Delay(1);
 	HAL_SPI_Transmit(&hspi2, (uint8_t*)XPT2046_ADDR_I, 1, 1000);
-	HAL_SPI_Transmit(&hspi2, 0x00, 1, 1000);
-	HAL_SPI_Transmit(&hspi2, 0x00, 1, 1000);
+	HAL_SPI_TransmitReceive(&hspi2, (uint8_t*)XPT2046_ADDR_I, &data, sizeof(data), 1000);
+	HAL_SPI_TransmitReceive(&hspi2, (uint8_t*)XPT2046_ADDR_I, &data, sizeof(data), 1000);
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, GPIO_PIN_SET);
+
 }
 
 uint16_t getRaw(uint8_t address)
@@ -29,14 +32,6 @@ uint16_t getRaw(uint8_t address)
 	uint8_t data;
 	uint16_t LSB, MSB;
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, GPIO_PIN_RESET);
-
-
-/*	HAL_SPI_Transmit(&hspi2, &address, 1, 1000);
-	uint16_t data4;
-	address = 0x00;
-	HAL_SPI_TransmitReceive(&hspi2, &address, &data4, sizeof(data4), 1000);
-	data4>>3;*/
-
 	HAL_Delay(1);
 	HAL_SPI_Transmit(&hspi2, &address, 1, 1000);
 	address = 0x00;
@@ -46,14 +41,7 @@ uint16_t getRaw(uint8_t address)
 	HAL_SPI_TransmitReceive(&hspi2, &address, &data, sizeof(data), 1000);
 	LSB = data;
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, GPIO_PIN_SET);
-
-
-	uint16_t data1 = LSB >> 3;
-	uint16_t data2 = MSB << 5;
-	uint16_t data3 = data1|data2;
-
-
-	return data3;
+	return ((MSB << 8) | (LSB)) >> 3;
 
 
 }
@@ -104,6 +92,7 @@ uint16_t getY(void)
 		return y[0];
 	}
 	else if (XPT2046_REVERSED) return X(); else return Y();
+
 }
 
 
