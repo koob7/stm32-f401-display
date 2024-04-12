@@ -10,7 +10,7 @@ extern SPI_HandleTypeDef hspi2;
 
 inline static float remap(float x, float in_min, float in_max, float out_min, float out_max)
 {
-	float new = ((x - in_min)  / (in_max - in_min))* (out_max - out_min) + out_min;
+
 	return ((x - in_min)  / (in_max - in_min))* (out_max - out_min) + out_min;
 }
 
@@ -19,6 +19,10 @@ void XPT2046_Init(void)
 	uint8_t data;
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, GPIO_PIN_RESET);
 	HAL_Delay(1);
+//	for (int i =0; i<1000;i+=1)
+//	{
+//		asm("nop");
+//	}
 	HAL_SPI_Transmit(&hspi2, (uint8_t*)XPT2046_ADDR_I, 1, 1000);
 	HAL_SPI_TransmitReceive(&hspi2, (uint8_t*)XPT2046_ADDR_I, &data, sizeof(data), 1000);
 	HAL_SPI_TransmitReceive(&hspi2, (uint8_t*)XPT2046_ADDR_I, &data, sizeof(data), 1000);
@@ -32,7 +36,11 @@ uint16_t getRaw(uint8_t address)
 	uint8_t data;
 	uint16_t LSB, MSB;
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, GPIO_PIN_RESET);
-	HAL_Delay(1);
+	//HAL_Delay(1);
+//			for (int i =0; i<1000;i+=1)
+//			{
+//				asm("nop");
+//			}
 	HAL_SPI_Transmit(&hspi2, &address, 1, 1000);
 	address = 0x00;
 	HAL_SPI_TransmitReceive(&hspi2, &address, &data, sizeof(data), 1000);
