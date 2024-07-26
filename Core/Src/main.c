@@ -252,10 +252,15 @@ int main(void)
 //	LCD_FillTriangle(574-170, 74+41,573+13-170, 74+41, 580-170, 74+11+41, 0x00FD);
 //	LCD_FillTriangle(574-322, 74+41,573+13-322, 74+41, 580-322, 74+11+41, 0x00FD);
 
-    TFT_Draw_Fill_Round_Rect (100, 180, 200, 120, 20,  0xD6BA);
-    LCD_centered_Font(100, 240, 200, "Prawo", _Open_Sans_Bold_28, 1, BLACK);
-    TFT_Draw_Fill_Round_Rect (500, 180, 200, 120, 20,  0xD6BA);
-    LCD_centered_Font(500, 240, 200, "Lewo", _Open_Sans_Bold_28, 1, BLACK);
+    TFT_Draw_Fill_Round_Rect (100, 80, 200, 120, 20,  0xD6BA);
+    LCD_centered_Font(100, 40, 200, "Prawo", _Open_Sans_Bold_28, 1, BLACK);
+    TFT_Draw_Fill_Round_Rect (500, 80, 200, 120, 20,  0xD6BA);
+    LCD_centered_Font(500, 40, 200, "Lewo", _Open_Sans_Bold_28, 1, BLACK);
+
+    TFT_Draw_Fill_Round_Rect (100, 280, 200, 120, 20,  0xD6BA);
+    LCD_centered_Font(100, 340, 200, "Szybciej", _Open_Sans_Bold_28, 1, BLACK);
+    TFT_Draw_Fill_Round_Rect (500, 280, 200, 120, 20,  0xD6BA);
+    LCD_centered_Font(500, 340, 200, "Wolniej", _Open_Sans_Bold_28, 1, BLACK);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -269,7 +274,7 @@ int main(void)
 	__HAL_GPIO_EXTI_CLEAR_IT(T_IRQ_Pin);//czyszczenie zgłoszonego przerwania
 	NVIC_EnableIRQ(EXTI15_10_IRQn);
 
-
+int speed =20000;
   while (1)
   {
 	  if(was_touched==1){
@@ -295,19 +300,7 @@ int main(void)
 
 
 
-	if(touchx >=100 && touchx<=300 && touchy>=180 && touchy<=300)// 696, pos_y, 88, 47,
-	{
-		HAL_GPIO_WritePin(dir_GPIO_Port , dir_Pin, GPIO_PIN_SET);
-		was_touched=1;
-		for(int i =0; i<10; i++){
-			  HAL_GPIO_WritePin(step_GPIO_Port , step_Pin, GPIO_PIN_SET);
-			  HAL_GPIO_WritePin(step_GPIO_Port , step_Pin, GPIO_PIN_RESET);
-			  for(int j =0; j<20000; j++){
-				  asm("NOP");
-			  }
-		  }
-	}
-	if(touchx >=500 && touchx<=700 && touchy>=180 && touchy<=300)// 696, pos_y, 88, 47,
+	if(touchx >=100 && touchx<=300 && touchy>=80 && touchy<=200)// 696, pos_y, 88, 47,
 	{
 		HAL_GPIO_WritePin(dir_GPIO_Port , dir_Pin, GPIO_PIN_RESET);
 		was_touched=1;
@@ -318,7 +311,30 @@ int main(void)
 				  asm("NOP");
 			  }
 		  }
+	}
+	if(touchx >=500 && touchx<=700 && touchy>=80 && touchy<=200)// 696, pos_y, 88, 47,
+	{
+		HAL_GPIO_WritePin(dir_GPIO_Port , dir_Pin, GPIO_PIN_SET);
+		was_touched=1;
+		for(int i =0; i<10; i++){
+			  HAL_GPIO_WritePin(step_GPIO_Port , step_Pin, GPIO_PIN_SET);
+			  HAL_GPIO_WritePin(step_GPIO_Port , step_Pin, GPIO_PIN_RESET);
+			  for(int j =0; j<speed; j++){
+				  asm("NOP");
+			  }
+		  }
 
+	}
+
+	if(touchx >=100 && touchx<=300 && touchy>=280 && touchy<=400)// 696, pos_y, 88, 47,
+	{
+		if (speed<20000)
+			speed+=1000;
+	}
+	if(touchx >=500 && touchx<=700 && touchy>=280 && touchy<=400)// 696, pos_y, 88, 47,
+	{
+		if (speed>10000)
+			speed-=1000;
 	}
 
 	XPT2046_Init();
